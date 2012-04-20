@@ -21,7 +21,6 @@ taffy_uri="/sessions"
 		local.sessions = [];
 		for (local.i = 1; local.i <= local.qSessions.recordCount; local.i++){
 			local.s = {
-				"sessionId": local.qSessions.sessionId[local.i],
 				"title": local.qSessions.sessionTitle[local.i],
 				"desc": local.qSessions.sessionDesc[local.i],
 				"startDate": local.qSessions.startDate[local.i],
@@ -46,15 +45,11 @@ taffy_uri="/sessions"
 
 			local.spkResult = local.qSpk.execute().getResult();
 
-			local.s.dump = serializeJson(local.spkResult, true);
-
 			for (local.j = 1; local.j <= local.spkResult.recordCount; local.j++){
 				arrayAppend(local.s.speakers, {
 					"name": local.spkResult.speakerName[local.j],
 					"bio": local.spkResult.speakerBio[local.j],
-					"url": "http://localhost/presentations/getting_rest/taffy/index.cfm/speakers/" & local.spkResult.speakerSlug[local.j],
-					"speakerCount": local.spkResult.recordCount,
-					"sessionId": local.qSessions.sessionId[local.i]
+					"url": "http://localhost/presentations/getting_rest/taffy/index.cfm/speakers/" & local.spkResult.speakerSlug[local.j]
 				});
 			}
 
