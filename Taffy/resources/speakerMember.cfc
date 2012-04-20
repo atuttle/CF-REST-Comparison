@@ -9,15 +9,25 @@ taffy_uri="/speakers/{speakerSlug}"
 
 	function get(speakerSlug)
 	{
-		local.result = variables.speakerModel.getSpeaker(arguments.speakerSlug);
+		local.speaker = variables.speakerModel.getSpeaker(arguments.speakerSlug);
 
-		if (isSimpleValue(local.result) && local.result == false){
+		if (isSimpleValue(local.speaker) && local.speaker == false){
 
 			return noData().withStatus(404, "Not Found");
 
 		}else{
 
-			return representationOf( local.result );
+			//inject api-framework-specific url elements
+			local.speaker["url"] = "http://localhost/presentations/getting_rest/Taffy/index.cfm/speakers/" & speaker.slug;
+
+			//also link each speaker for each session
+			arrayEach(local.speaker.sessions, function(session){
+
+				session["url"] = "http://localhost/presentations/getting_rest/Taffy/index.cfm/sessions/" & session.slug;
+
+			});
+
+			return representationOf( local.speaker );
 
 		}
 	}

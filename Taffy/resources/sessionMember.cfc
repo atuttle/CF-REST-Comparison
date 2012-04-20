@@ -17,6 +17,16 @@ taffy_uri="/sessions/{sessionSlug}"
 
 		}else{
 
+			//inject api-framework-specific url elements
+			local.session["url"] = "http://localhost/presentations/getting_rest/Taffy/index.cfm/sessions/" & local.session.slug;
+
+			//also link each speaker for each session
+			arrayEach(local.session.speakers, function(speaker){
+
+				speaker["url"] = "http://localhost/presentations/getting_rest/Taffy/index.cfm/speakers/" & speaker.slug;
+
+			});
+
 			return representationOf( local.session );
 
 		}
