@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mach-ii PUBLIC "-//Mach-II//DTD Mach-II Configuration 1.9.0//EN" "http://www.mach-ii.com/dtds/mach-ii_1_9_0.dtd">
+<mach-ii version="1.9.0">
+
+
+
+
+	<endpoints>
+		<endpoint name="sessions" type="endpoints.sessionCollection" defaultFormat="json" />
+	</endpoints>
+
+
+
+
+	<properties>
+		<property name="applicationRoot" value="/presentations/getting_rest/machii" />
+		<property name="defaultEvent" value="home" />
+		<property name="eventParameter" value="event" />
+		<property name="parameterPrecedence" value="form" />
+		<property name="maxEvents" value="10" />
+		<property name="exceptionEvent" value="exception" />
+	</properties>
+	<event-handlers>
+		<event-handler event="home" access="public">
+			<view-page name="home" />
+		</event-handler>
+		<event-handler event="exception" access="private">
+			<view-page name="exception" />
+		</event-handler>
+	</event-handlers>
+	<page-views>
+		<page-view name="home" page="/views/home.cfm" />
+		<page-view name="exception" page="/views/exception.cfm" />
+	</page-views>
+
+</mach-ii>
