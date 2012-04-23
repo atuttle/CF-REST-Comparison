@@ -6,6 +6,7 @@
 	<cfset this.mappings = {} />
 	<cfset this.mappings["/shared"] = expandPath( '../_model' ) />
 
+	<!--- reload on every request --->
 	<cfset MACHII_CONFIG_MODE = 1 />
 
 </cfcomponent>

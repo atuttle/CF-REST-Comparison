@@ -3,25 +3,27 @@
              output="false"
              hint="RESTful endpoint for Sessions">
 
-	<cfset variables.sessionModel = createObject( "shared.sessions" )/>
+	<cfset variables.speakerModel = createObject( "shared.speakers" )/>
 
-	<cffunction name="getAllSessions"
+	<cffunction name="getAllSpeakers"
 	            access="public"
 	            output="false"
-	            rest:uri="/sessions"
+	            rest:uri="/speakers"
 	            rest:method="GET">
 		<cfargument name="event"
 		            type="MachII.framework.Event"
 		            required="true"/>
 
-		<cfreturn serializeJson( variables.sessionModel.getAllSessionsWithSpeakers() )/>
+		<cfset local.speakers = variables.speakerModel.getAllSpeakersWithSessions() />
+
+		<cfreturn serializeJson( local.speakers ) />
 
 	</cffunction>
 
-	<cffunction name="getSingleSession"
+	<cffunction name="getSpeaker"
 	            access="public"
 	            output="false"
-	            rest:uri="/sessions/{slug}"
+	            rest:uri="/speakers/{slug}"
 	            rest:method="GET">
 		<cfargument name="event"
 		            type="MachII.framework.Event"
@@ -29,11 +31,13 @@
 
 		<cfset local.slug = event.getArg( "slug" )/>
 
-		<cfset local.session = variables.sessionModel.getSession(local.slug) />
+		<cfset local.speaker = variables.speakerModel.getSpeaker(local.slug) />
 
-		<cfreturn serializeJson(local.session) />
+		<cfreturn serializeJson( local.speaker ) />
 
 	</cffunction>
+
+
 
 	<cffunction name="onException"
 	            output="false">
