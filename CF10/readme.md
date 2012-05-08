@@ -3,8 +3,14 @@
 ## Requirements for CF10 REST
 
 * All remote methods must have `returnType="..."` specified (where `...` is the type that will be returned).
+* Don't forget `restArgSource` for `<cfargument/>` tags for URI-token arguments.
+
+### Quirks...
+
+* After _every_ change, you have to refresh your service in CF Administrator.
+  * If you change a file but don't refresh, expecting CF to use the version from the last time you refreshed, you're gonna have a bad time. Instead, CF will throw a 500 error with the status message "Object is not an instance of declaring class".
 * Application-specific mappings are not supported. Use server-mappings or the fully-qualified cfc path instead.
-* Getting nothing but 404s when CF is hooked up to Apache? [Read this][1]
+* Getting nothing but 404s when CF is hooked up to Apache? [Read this][1].
 
 ## When a REST service starts returning 404 out of the blue...
 
@@ -13,6 +19,12 @@ The first thing I do is look at the log. It's unfortunate, but this seems to be 
 CF10 logs REST service refresh errors to the exception log. Find it in the CF Administrator, **Debugging & Logging** section, **Log Files** Screen; as **exception.log**. Unless you're a superhero coder, yours probably has thousands and thousands of lines (exceptions from all applications on this CF instance, not just REST), and oh happy day, newest entries go at the end. My advice is not to even bother trying to page/jump to the end, just delete it (the X icon) and refresh your service again so that your REST error is the only thing in the file. Then go back to logging and look at the stack trace.
 
 If the stack trace's first line or two doesn't seem very helpful, make sure you read the whole thing. Often times the useful details are buried down in later lines -- even on the second page, even when there's only 1 error logged.
+
+### Getting more debug information
+
+Since we're interacting with an API and not a webpage, CFDump loses its utility. We can't use it here. _Or can we?!_
+
+If it's available to you, the CFBuilder Step Debugger is a great place to start. But if it's not for some reason, then you can use CFMail to send yourself dumps of variables/errors/etc. Or send that output to a file. Get creative!
 
 
 [1]:http://fusiongrokker.com/post/getting-nothing-but-404-s-for-coldfusion-10-rest-on-apache
