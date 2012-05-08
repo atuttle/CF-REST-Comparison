@@ -1,4 +1,4 @@
-# Debug Advice
+# Creating REST API's in ColdFusion 10
 
 ## Requirements for CF10 REST
 
