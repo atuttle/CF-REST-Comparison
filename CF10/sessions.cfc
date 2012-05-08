@@ -23,7 +23,8 @@
 				produces="application/json"
 				httpMethod="GET"
 				restPath="/{sessionSlug}"><!--- implies /sessions/{sessionSlug} --->
-		<cfargument name="sessionSlug" />
+		<cfargument name="sessionSlug"
+					restArgSource="path" />
 
 		<cfset local.session = variables.sessionModel.getSession(arguments.sessionSlug, true) />
 
