@@ -3,7 +3,7 @@
 ## Requirements for CF10 REST
 
 * All remote methods must have `returnType="..."` specified (where `...` is the type that will be returned).
-* Don't forget `restArgSource` for `<cfargument/>` tags for URI-token arguments.
+* Don't forget `restArgSource` for `<cfargument/>` tags for URI-token arguments. The default value for `restArgSource` is `body`, which will not work if you're trying to get a value from the URI.
 
 ### Quirks...
 
@@ -11,6 +11,19 @@
   * If you change a file but don't refresh, expecting CF to use the version from the last time you refreshed, you're gonna have a bad time. Instead, CF will throw a 500 error with the status message "Object is not an instance of declaring class".
 * Application-specific mappings are not supported. Use server-mappings or the fully-qualified cfc path instead.
 * Getting nothing but 404s when CF is hooked up to Apache? [Read this][1].
+
+#### On Leading Slashes...
+
+The leading slash for both the `restPath` attribute of the `<cfcomponent/>` tag _and_ the `restPath` attribute of the `<cffunction/>` tag are **OPTIONAL**. That means that both of these component tags behave identically:
+
+	<cfcomponent restPath="/sessions">
+	<cfcomponent restPath="sessions">
+
+And just the same way, both of these function tags behave identically:
+
+	<cffunction name="getFoo" restPath="/{sessionSlug}" ...>
+	<cffunction name="getFoo" restPath="{sessionSlug}" ...>
+
 
 ## When a REST service starts returning 404 out of the blue...
 
