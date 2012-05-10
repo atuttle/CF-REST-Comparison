@@ -6,6 +6,10 @@
 
 	<cfset variables.sessionModel = createObject("component", "presentations.getting_rest._model.sessions") />
 
+	<!---
+		COLLECTION
+	--->
+
 	<cffunction name="getAllSessions"
 				access="remote"
 				produces="application/json"
@@ -16,6 +20,10 @@
 		<cfreturn local.sessions />
 
 	</cffunction>
+
+	<!---
+		MEMBER
+	--->
 
 	<cffunction name="getSingleSession"
 				access="remote"
@@ -35,6 +43,10 @@
 		<cfreturn local.session />
 
 	</cffunction>
+
+	<!---
+		POST: JSON
+	--->
 
 	<cffunction name="createSessionFromJson"
 				access="remote"
@@ -74,6 +86,11 @@
 		</cfif>
 
 	</cffunction>
+
+	<!---
+		POST: FORM
+	--->
+
 	<cffunction name="createSessionFromForm"
 				access="remote"
 				produces="application/json"
