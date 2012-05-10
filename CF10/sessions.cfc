@@ -36,4 +36,80 @@
 
 	</cffunction>
 
+	<cffunction name="createSessionFromJson"
+				access="remote"
+				produces="application/json"
+				consumes="application/json"
+				returnType="void"
+				httpMethod="POST">
+
+		<!---
+			With Content-Type: application/json and the following <cfargument> tag,
+			CF deserializes the body and stores the result in the argument.
+		--->
+		<cfargument name="body" />
+
+		<cfset local.addResult = variables.sessionModel.create(
+			arguments.body.title,
+			arguments.body.desc,
+			arguments.body.startDate,
+			arguments.body.slug,
+			arguments.body.speakerSlugs
+		) />
+
+		<cfif local.addResult eq true>
+			<!---
+				Using restSetResponse instead of returning a value?
+				Make sure your function has returnType="void"!
+			--->
+			<cfset restSetResponse({
+				status: 201,
+				content: '"success"' <!--- notice both quotes: returning json! --->
+			}) />
+		<cfelse>
+			<cfset restSetResponse({
+				status: 500,
+				content: '"Unable to create session"'
+			}) />
+		</cfif>
+
+	</cffunction>
+	<cffunction name="createSessionFromForm"
+				access="remote"
+				produces="application/json"
+				consumes="application/x-www-form-urlencoded"
+				returnType="void"
+				httpMethod="POST">
+
+		<cfargument name="title" restArgSource="form" />
+		<cfargument name="desc" restArgSource="form" />
+		<cfargument name="startDate" restArgSource="form" />
+		<cfargument name="slug" restArgSource="form" />
+		<cfargument name="speakerSlugs" restArgSource="form" />
+
+		<!--- split slugs from comma-delimited list to array --->
+		<cfset arguments.speakerSlugs = listToArray(arguments.speakerSlugs) />
+
+		<cfset local.addResult = variables.sessionModel.create(
+			arguments.title,
+			arguments.desc,
+			arguments.startDate,
+			arguments.slug,
+			arguments.speakerSlugs
+		) />
+
+		<cfif local.addResult eq true>
+			<cfset restSetResponse({
+				status: 201,
+				content: '"success"'
+			}) />
+		<cfelse>
+			<cfset restSetResponse({
+				status: 500,
+				content: '"Unable to create session"'
+			}) />
+		</cfif>
+
+	</cffunction>
+
 </cfcomponent>
