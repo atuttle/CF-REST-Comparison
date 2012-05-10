@@ -1,23 +1,22 @@
 # Creating REST API's in ColdFusion 10
 
-## Requirements for CF10 REST
+## Requirements / Quirks
 
 * All remote methods must have `returnType="..."` specified (where `...` is the type that will be returned).
 * Don't forget `restArgSource` for `<cfargument/>` tags for URI-token arguments. The default value for `restArgSource` is `body`, which will not work if you're trying to get a value from the URI.
-
-### Quirks...
-
+* Application-specific mappings are not supported. Use server-mappings or the fully-qualified cfc path instead.
 * Whenever refreshing services, I _always_ follow this workflow:
    1. Delete "exception.log" from the log files screen
    1. Refresh REST services
    1. Check to see if "exception.log" is back. (If so, read it and address the problem.)
-* After _every_ change, you have to refresh your service in CF Administrator.
-  * If you change a file but don't refresh, expecting CF to use the version from the last time you refreshed, you're gonna have a bad time. Instead, CF will throw a 500 error with the status message "Object is not an instance of declaring class".
-* **415 Unsupported Media Type**: you probably need a `restArgSource` attribute on your CFArgument tags.
-* Application-specific mappings are not supported. Use server-mappings or the fully-qualified cfc path instead.
-* Getting nothing but 404s when CF is hooked up to Apache? [Read this][1].
 
-#### On Leading Slashes...
+## Common Errors:
+
+* **500 Object is not an instance of declaring class**: One of your REST CFC's changed and you need to refresh the service.
+* **415 Unsupported Media Type**: you probably need a (different) `restArgSource` attribute on your CFArgument tags.
+* Nothing but **404** with Apache? [Read this][1].
+
+## On Leading Slashes...
 
 The leading slash for both the `restPath` attribute of the `<cfcomponent/>` tag _and_ the `restPath` attribute of the `<cffunction/>` tag are **OPTIONAL**. That means that both of these component tags behave identically:
 
@@ -29,8 +28,7 @@ And just the same way, both of these function tags behave identically:
 	<cffunction name="getFoo" restPath="/{sessionSlug}" ...>
 	<cffunction name="getFoo" restPath="{sessionSlug}" ...>
 
-
-## When a REST service starts returning 404 out of the blue...
+## Debugging
 
 The first thing I do is look at the log. It's unfortunate, but this seems to be the only window into the black-box that is CF10 REST Services Refreshing.
 
