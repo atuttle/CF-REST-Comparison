@@ -7,8 +7,13 @@
 
 ### Quirks...
 
+* Whenever refreshing services, I _always_ follow this workflow:
+   1. Delete "exception.log" from the log files screen
+   1. Refresh REST services
+   1. Check to see if "exception.log" is back. (If so, read it and address the problem.)
 * After _every_ change, you have to refresh your service in CF Administrator.
   * If you change a file but don't refresh, expecting CF to use the version from the last time you refreshed, you're gonna have a bad time. Instead, CF will throw a 500 error with the status message "Object is not an instance of declaring class".
+* **415 Unsupported Media Type**: you probably need a `restArgSource` attribute on your CFArgument tags.
 * Application-specific mappings are not supported. Use server-mappings or the fully-qualified cfc path instead.
 * Getting nothing but 404s when CF is hooked up to Apache? [Read this][1].
 
