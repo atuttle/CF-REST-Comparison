@@ -14,16 +14,7 @@
 		            type="MachII.framework.Event"
 		            required="true"/>
 
-		<cfset local.sessions = variables.sessionModel.getAllSessionsWithSpeakers() />
-
-		<cfscript>
-			arrayEach(local.sessions, function(sess) {
-				sess["url"] = "http://localhost/presentations/getting_rest/machii/index.cfm/sessions/" & sess["slug"];
-				arrayEach(sess["speakers"], function(speaker){
-					speaker["url"] = "http://localhost/presentations/getting_rest/machii/index.cfm/speakers/" & speaker["slug"];
-				});
-			});
-		</cfscript>
+		<cfset local.sessions = variables.sessionModel.getAllSessionsWithSpeakers( "http://localhost/presentations/getting_rest/machii/index.cfm" ) />
 
 		<cfreturn serializeJson( local.sessions )/>
 
@@ -40,14 +31,7 @@
 
 		<cfset local.slug = event.getArg( "slug" )/>
 
-		<cfset local.session = variables.sessionModel.getSession(local.slug) />
-
-		<cfscript>
-			local.session["url"] = "http://localhost/presentations/getting_rest/machii/index.cfm/sessions/" & local.session["slug"];
-			arrayEach(local.session["speakers"], function(speaker){
-				speaker["url"] = "http://localhost/presentations/getting_rest/machii/index.cfm/speakers/" & speaker["slug"];
-			});
-		</cfscript>
+		<cfset local.session = variables.sessionModel.getSession(local.slug, "http://localhost/presentations/getting_rest/machii/index.cfm") />
 
 		<cfreturn serializeJson(local.session) />
 

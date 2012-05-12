@@ -1,6 +1,6 @@
 component{
 
-	function getAllSessionsWithSpeakers(){
+	function getAllSessionsWithSpeakers(api_base_path = ""){
 		local.q = new Query();
 
 		local.q.setSql("
@@ -50,10 +50,31 @@ component{
 			arrayAppend( local.sessions, duplicate( local.s ) );
 		}
 
+		/*
+			NORMALLY YOUR MODEL WOULDN'T HAVE THIS NEXT SECTION, BUT I'VE ADDED IT
+			TO MAKE NAVIGATING THE API EASIER IN THE BROWSER
+		*/
+		if (arguments.api_base_path neq "") {
+			//inject api-framework-specific url elements
+			arrayEach(local.sessions, function(session){
+
+				//add url for current session
+				session["url"] = api_base_path & "/sessions/" & session.slug;
+
+				//also link each speaker for each session
+				arrayEach(session.speakers, function(speaker){
+
+					speaker["url"] = api_base_path & "/speakers/" & speaker.slug;
+
+				});
+
+			});
+		}
+
 		return local.sessions;
 	}
 
-	function getSession(sessionSlug, boolean speakers = true){
+	function getSession(sessionSlug, api_base_path = "", boolean speakers = true){
 		local.q = new Query();
 		q.setSql("
 			select
@@ -91,6 +112,23 @@ component{
 						'slug': local.qResult.speakerSlug[local.i]
 					});
 				}
+			}
+
+			/*
+				NORMALLY YOUR MODEL WOULDN'T HAVE THIS NEXT SECTION, BUT I'VE ADDED IT
+				TO MAKE NAVIGATING THE API EASIER IN THE BROWSER
+			*/
+			if (arguments.api_base_path neq "") {
+				//inject api-framework-specific url elements
+				//add url for current session
+				local.result["url"] = api_base_path & "/sessions/" & local.result.slug;
+
+				//also link each speaker for each session
+				arrayEach(local.result.speakers, function(speaker){
+
+					speaker["url"] = api_base_path & "/speakers/" & speaker.slug;
+
+				});
 			}
 
 			return local.result;

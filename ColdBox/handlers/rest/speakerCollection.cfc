@@ -17,7 +17,7 @@ component{
 		new header(name="X-COLDBOX-HANDLER",value="speakerCollection");
 
 		event.renderData(
-			data=variables.speakerModel.getAllSpeakersWithSessions(),
+			data=variables.speakerModel.getAllSpeakersWithSessions( "http://localhost/presentations/getting_rest/coldbox/index.cfm" ),
 			type=rc.format
 		);
 

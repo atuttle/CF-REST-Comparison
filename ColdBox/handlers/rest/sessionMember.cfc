@@ -15,7 +15,7 @@ component{
 		event.paramValue("format", "json");
 
 		event.renderData(
-			data=variables.sessionModel.getSession(rc.sessionSlug),
+			data=variables.sessionModel.getSession(rc.sessionSlug, "http://localhost/presentations/getting_rest/coldbox/index.cfm"),
 			type=rc.format
 		);
 	}

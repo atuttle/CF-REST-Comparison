@@ -16,7 +16,7 @@
 				produces="application/json"
 				httpMethod="GET">
 
-		<cfset local.speakers = variables.speakerModel.getAllSpeakersWithSessions() />
+		<cfset local.speakers = variables.speakerModel.getAllSpeakersWithSessions( "http://localhost/rest/cfobjective" ) />
 		<cfreturn local.speakers />
 
 	</cffunction>
@@ -34,7 +34,7 @@
 
 		<cfargument name="speakerSlug" restArgSource="path" />
 
-		<cfset local.speaker = variables.speakerModel.getSpeaker(arguments.speakerSlug) />
+		<cfset local.speaker = variables.speakerModel.getSpeaker(arguments.speakerSlug, "http://localhost/rest/cfobjective") />
 		<cfreturn local.speaker />
 
 	</cffunction>

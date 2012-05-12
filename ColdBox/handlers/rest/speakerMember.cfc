@@ -12,7 +12,7 @@ component{
 		new header(name="X-COLDBOX-HANDLER",value="speakerMember");
 
 		event.renderData(
-			data=variables.speakerModel.getSpeaker(rc.speakerSlug),
+			data=variables.speakerModel.getSpeaker(rc.speakerSlug, "http://localhost/presentations/getting_rest/coldbox/index.cfm"),
 			type=rc.format
 		);
 	}

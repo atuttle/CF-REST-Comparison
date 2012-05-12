@@ -1,5 +1,3 @@
-// http://localhost/presentations/getting_rest/Taffy/index.cfm/speakers
-
 component
 extends="taffy.core.resource"
 taffy_uri="/speakers"
@@ -9,22 +7,7 @@ taffy_uri="/speakers"
 
 	function get()
 	{
-		local.speakers = variables.speakerModel.getAllSpeakersWithSessions();
-
-		//inject api-framework-specific url elements
-		arrayEach(local.speakers, function(speaker){
-
-			//add url for current session
-			speaker["url"] = "http://localhost/presentations/getting_rest/Taffy/index.cfm/speakers/" & speaker.slug;
-
-			//also link each speaker for each session
-			arrayEach(speaker.sessions, function(session){
-
-				session["url"] = "http://localhost/presentations/getting_rest/Taffy/index.cfm/sessions/" & session.slug;
-
-			});
-
-		});
+		local.speakers = variables.speakerModel.getAllSpeakersWithSessions( "http://localhost/presentations/getting_rest/Taffy/index.cfm" );
 
 		return representationOf( local.speakers );
 	}
