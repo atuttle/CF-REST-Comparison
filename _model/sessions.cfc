@@ -74,7 +74,7 @@ component{
 		return local.sessions;
 	}
 
-	function getSession(sessionSlug, api_base_path = "", boolean speakers = true){
+	function getSession(sessionSlug, api_base_path = "", boolean includeSpeakers = true){
 		local.q = new Query();
 		q.setSql("
 			select
@@ -103,7 +103,7 @@ component{
 				'slug': local.qResult.sessionSlug
 			};
 
-			if (arguments.speakers){
+			if (arguments.includeSpeakers){
 				local.result['speakers'] = [];
 				for (local.i = 1; local.i <= local.qResult.recordCount; local.i++){
 					arrayAppend(local.result.speakers, {
