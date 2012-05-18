@@ -37,6 +37,42 @@
 
 	</cffunction>
 
+	<cffunction name="createSession"
+				access="public"
+				output="false"
+				returnType="void"
+				rest:uri="/sessions"
+				rest:method="POST">
+		<cfargument name="event"
+					type="MachII.framework.event"
+					required="true" />
+
+		<cfswitch expression="#isJson(event._requestBody)#">
+			<cfcase value="true">
+				<cfset local.args = deserializeJSON(event._requestBody) />
+			</cfcase>
+			<cfcase value="false">
+				<cfset local.args = event.getArgs() />
+			</cfcase>
+		</cfswitch>
+
+		<cfset local.addResult = variables.sessionModel.create(
+			local.args.title,
+			local.args.desc,
+			local.args.startDate,
+			local.args.slug,
+			local.args.speakerSlugs
+		) />
+
+		<cfif local.addResult eq true>
+			<cfheader statuscode="201" statustext="Success" />
+		<cfelse>
+			<cfheader statuscode="500" statustext="Unable to create session" />
+		</cfif>
+
+	</cffunction>
+
+
 	<cffunction name="onException"
 	            output="false">
 		<cfargument name="event"
