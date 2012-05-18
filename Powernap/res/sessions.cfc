@@ -26,4 +26,28 @@ extends="powernap.core.Resource"
 
 	}
 
+	function createSession(title,desc,startDate,slug,speakerSlugs){
+
+		local.addResult = variables.sessionModel.create(
+			arguments.title,
+			arguments.desc,
+			arguments.startDate,
+			arguments.slug,
+			arguments.speakerSlugs
+		);
+
+		local.representation = createObject("presentations.getting_rest.powernap.myRepresentation").init();
+
+		switch (local.addResult){
+			case false:
+				local.representation.withStatus( 500 );
+				break;
+			default:
+				local.representation.withStatus( 201 );
+		}
+
+		return local.representation;
+
+	}
+
 }
