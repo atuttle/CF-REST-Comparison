@@ -1,236 +1,167 @@
-<!doctype html>
-<html lang="en">
-
+<!DOCTYPE html>
+<html>
 	<head>
-		<meta charset="utf-8">
-
 		<title>Are You Getting Enough REST?</title>
 
 		<meta name="description" content="A comparison of REST API frameworks for ColdFusion">
 		<meta name="author" content="Adam Tuttle">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
-		<link href='http://fonts.googleapis.com/css?family=Signika+Negative:700|Lato:400,400italic' rel='stylesheet' type='text/css'>
-
-		<link rel="stylesheet" href="reveal.js/css/reset.css" />
-		<link rel="stylesheet" href="reveal.js/css/main.css" />
-		<link rel="stylesheet" href="customizations.css" />
-		<link rel="stylesheet" href="reveal.js/css/print.css" type="text/css" media="print" />
-
-		<link rel="stylesheet" href="reveal.js/lib/zenburn.css">
+		<link rel="stylesheet" href="css/style.css" type="text/css">
+		<link rel="stylesheet" href="syntaxhighlighter/shThemeDefault.css" type="text/css">
+		<script src="js/jquery-1.7.min.js"></script>
+		<script src="js/angular-1.0.0rc8.min.js"></script>
+		<script src="js/presentation.js"></script>
+		<script src="js/keyboard.js"></script>
+		<script src="syntaxhighlighter/shCore.js"></script>
+		<script src="syntaxhighlighter/shBrushJScript.js"></script>
+		<script src="syntaxhighlighter/shBrushXml.js"></script>
+		<script>
+			SyntaxHighlighter.all();
+			angular.module('AppModule', ['PresentationModule', 'KeyboardModule']);
+		</script>
 	</head>
+	<body
+		ng-app="AppModule"
+		ng-controller="PresentationController"
+		keyboard-left="previous()"
+		keyboard-right="next()"
+		keyboard-pageUp="previous()"
+		keyboard-pageDown="next()">
 
-	<body>
-
-		<div id="reveal">
-
-			<!-- Used to fade in a background when a specific slide state is reached -->
-			<div class="state-background"></div>
-
-			<!-- Any section element inside of this container is displayed as a slide -->
-			<div class="slides">
-
-				<section>
-					<h1>Are You Getting Enough REST?</h1>
-					<h3 class="inverted">Adam Tuttle</h3>
-					<h4 class="inverted">For cf.Objective()<br/>May 2012</h4>
-					<script>
-						// Delicously hacky. Look away.
-						if( navigator.userAgent.match( /(iPhone|iPad|iPod|Android)/i ) ) document.write( '<p style="color: rgba(0,0,0,0.3); text-shadow: none;">('+'Tap to navigate'+')</p>' );
-					</script>
-				</section>
-
-				<section>
-					<h2>About Me</h2>
-					<ul>
-						<li>"Work" at CounterMarch Systems, near Philadelphia</li>
-						<li>Manager of <a href="http://www.phillycfug.org">Philly CFUG</a> 2009-Present</li>
-						<li>ColdFusion ACP 2010-Present</li>
-						<li>Blog: <a href="http://fusiongrokker.com">fusiongrokker.com</a></li>
-						<li><a href="http://www.phillymerge.com">Philly Merge</a>: nerds/biz/design crossover conference</li>
-						<li>DJ Weekly on <a href="http://codebassradio.net/">CodeBass Radio</a>: Tuesdays at 4pm Eastern</li>
-						<li>Open Source:
-							<ul>
-								<li><a href="http://github.com/atuttle/Taffy">Taffy</a></li>
-								<li><a href="https://github.com/CFCommunity/CFScript-Community-Components">CFScript Community Components</a></li>
-								<li>13 Mango Blog plugins (Related Entries, Scribe, ...)</li>
-							</ul>
-						</li>
-					</ul>
-				</section>
-
-				<section>
-					<img src="img/dylan.jpg" />
-				</section>
-
-				<section>
-					<h2>Come At Me, Bro!</h2>
-					<img src="img/ethan.jpg" />
-				</section>
-
-				<section>
-					<h1>Agenda</h1>
-					<p>Talk about REST frameworks, not learn basic theory.</p>
-					<ul>
-						<li>Database</li>
-						<li>Reusable Model</li>
-						<li>5 Frameworks+
-							<ul>
-								<li>ColdFusion 10</li>
-								<li>ColdBox</li>
-								<li>Mach-II</li>
-								<li>Powernap</li>
-								<li>Taffy</li>
-							</ul>
-						</li>
-						<li>Differences</li>
-					</ul>
-				</section>
-
-				<section>
-					<h1>Database</h1>
-					<p>A conference scheduling database</p>
-					<p><br/></p>
-					<p>Promised not to use the "Artists" database!</p>
-				</section>
-
-				<section>
-					<h1><del>"Permiscuous"</del> Reusable Model</h1>
-					<ul>
-						<li>Speakers</li>
-						<li>Sessions</li>
-					</ul>
-				</section>
-
-				<section>
-
-					<section>
-						<h1>Frameworks!</h1>
-						<p>These frameworks and more at your disposal...</p>
-						<ul>
-							<li>ColdFusion 10 ("Native")</li>
-							<li>ColdBox Relax</li>
-							<li>Mach-II</li>
-							<li>Powernap</li>
-							<li>Taffy</li>
-						</ul>
-					</section>
-
-					<section>
-						<h1>Proof</h1>
-						<p>Collections:</p>
-						<pre><code contenteditable>CF10: http://localhost/rest/cfobjective/sessions
-
-http://localhost/presentations/getting_rest/coldbox/index.cfm/sessions
-                                            machii
-                                            powernap
-                                            taffy</code></pre>
-						<p>Members:</p>
-						<pre><code contenteditable>/sessions/DCWVs-Midnight-Spell-Advent-Calendar</code></pre>
-					</section>
-
-					<section>
-						<h1>CF10 Debug Tips</h1>
-						<p>Lots of tips &amp; detail <a href="https://github.com/atuttle/CF-REST-Comparison/tree/master/CF10#readme">in a ReadMe in the repo</a></p>
-					</section>
-
-				</section>
-
-				<section>
-					<h1>Differences</h1>
-					<p>Primary differences are syntax &amp;<br/>amount of code you write.</p>
-					<br/>
-					<ul>
-						<li>URL Rewriting not necessary for index.cfm: <span class="hilight">CF10*</span></li>
-						<li>Auto-deserialization of JSON inputs: <span class="hilight">Taffy, CF10*</span></li>
-						<li>Abstracts serializing return: <span class="hilight">Taffy, ColdBox, CF10*, Powernap</span></li>
-						<li>Built-in tools for playing: <span class="hilight">Taffy, ColdBox*</span></li>
-						<li>Built-in tools for automated testing: <span class="hilight">ColdBox (Taffy 1.2?)</span></li>
-					</ul>
-					<p><br/></p>
-					<p><em>* Partial Credit</em></p>
-				</section>
-
-				<section>
-					<h1>Fín.</h1>
-					<p>Slides: <a href="http://fusiongrokker.com/p/Getting_REST/">fusiongrokker.com/p/Getting_REST/</a></p>
-					<p>Code: <a href="https://github.com/atuttle/CF-REST-Comparison">on GitHub</a>
-					<p>Contact information is on my blog</p>
-					<h4 class="inverted">fusiongrokker.com</h4>
-					<p><br/></p>
-					<p><strong>Please submit session feedback!</strong></p>
-					<h3 class="inverted">Adam Tuttle</h3>
-					<h3 class="inverted">Are You Getting Enough REST?</h3>
-				</section>
-
-			</div>
-
-			<!-- The navigational controls UI -->
-			<aside class="controls">
-				<a class="left" href="#">&#x25C4;</a>
-				<a class="right" href="#">&#x25BA;</a>
-				<a class="up" href="#">&#x25B2;</a>
-				<a class="down" href="#">&#x25BC;</a>
-			</aside>
-
-			<!-- Displays presentation progress, max value changes via JS to reflect # of slides -->
-			<div class="progress"><span></span></div>
-
+		<div id="intro">
+			<h1>Are You Getting<br/>Enough REST?</h1>
+			<h2>Adam Tuttle</h2>
+			<h3>For NCDevCon 2012</h3>
+			<h4 ng-show="isAfter()">@AdamTuttle / adam (at) fusiongrokker.com</h4>
 		</div>
 
-		<script src="reveal.js/js/reveal.js"></script>
+		<p id="counter" ng-show="isInsideDeck()">
+			<a href="#/slides/1">&laquo;</a>
+			{{activeSlide + 1}} / {{totalSlides}}
+			<a href="#/slides/{{totalSlides}}">&raquo;</a>
+		</p>
 
-		<!-- Optional libraries for code syntax highlighting and classList support in IE9 -->
-		<script src="reveal.js/lib/highlight.js"></script>
-		<script src="reveal.js/lib/classList.js"></script>
+		<deck current="activeSlide" total="totalSlides">
 
-		<script>
-			// Parse the query string into a key/value object
-			var query = {};
-			location.search.replace( /[A-Z0-9]+?=(\w*)/gi, function(a) {
-				query[ a.split( '=' ).shift() ] = a.split( '=' ).pop();
-			} );
+			<slide>
+				<h2>Obligatory "About Me"</h2>
+				<ul>
+					<li>CounterMarch Systems ~&gt; Philly</li>
+					<li><a href="http://www.phillycfug.org">Philly CFUG</a> Manager</li>
+					<li>ACP: ColdFusion</li>
+					<li>Blog: <a href="http://fusiongrokker.com">fusiongrokker.com</a></li>
+					<li><a href="http://www.phillymerge.com">Philly Merge</a></li>
+					<li>Open Source:
+						<ul>
+							<li><a href="http://github.com/atuttle/Taffy">Taffy</a></li>
+							<li><a href="https://github.com/CFCommunity/CFScript-Community-Components">CFScript Community Components</a></li>
+							<li><a href="https://github.com/CFCommunity/Ramen">Ramen</a></li>
+							<li>13 Mango Blog plugins (Related Entries, Scribe, ...)</li>
+						</ul>
+					</li>
+				</ul>
+			</slide>
 
-			// Fires when a slide with data-state=customevent is activated
-			Reveal.addEventListener( 'customevent', function() {
-				alert( '"customevent" has fired' );
-			} );
+			<slide>
+				<h2>Family</h2>
+				<img src="images/dylan.jpg" />
+			</slide>
 
-			// Fires each time a new slide is activated
-			Reveal.addEventListener( 'slidechanged', function( event ) {
-				// event.indexh & event.indexv
-			} );
+			<slide>
+				<h2>Come At Me, Bro!</h2>
+				<img src="images/ethan.jpg" />
+			</slide>
 
-			Reveal.initialize({
-				// Display controls in the bottom right corner
-				controls: true,
+			<slide>
+				<h1>Agenda</h1>
+				<p>Talk about REST frameworks, not learn basic theory.</p>
+				<ul>
+					<li>Database &amp; Reusable Model</li>
+					<li>Frameworks</li>
+					<ul>
+						<li>ColdFusion 10</li>
+						<li>ColdBox</li>
+						<li>Mach-II</li>
+						<li>Powernap</li>
+						<li>Taffy</li>
+					</ul>
+					<li>Differences</li>
+				</ul>
+			</slide>
 
-				// Display a presentation progress bar
-				progress: true,
+			<slide>
+				<h1>Database</h1>
+				<p>A conference scheduling database</p>
+				<p><br/></p>
+				<p>Promised not to use the "Artists" database!</p>
+			</slide>
 
-				// If true; each slide will be pushed to the browser history
-				history: true,
+			<slide>
+				<h1><del>"Permiscuous"</del> Reusable Model</h1>
+				<ul>
+					<li>Speakers</li>
+					<li>Sessions</li>
+				</ul>
+			</slide>
 
-				// Loops the presentation, defaults to false
-				loop: false,
+			<slide>
+				<h1>Frameworks!</h1>
+				<p>These frameworks and more at your disposal...</p>
+				<ul>
+					<li>ColdFusion 10 ("Native")</li>
+					<li>ColdBox Relax</li>
+					<li>Mach-II</li>
+					<li>Powernap</li>
+					<li>Taffy</li>
+				</ul>
+			</slide>
 
-				// Flags if mouse wheel navigation should be enabled
-				mouseWheel: true,
+			<slide>
+				<h1>Proof</h1>
+				<p>Collections:</p>
+				<p>
+					<a href="http://localhost/rest/cfobjective/sessions">CF10</a>, 
+					<a href="http://localhost/presentations/getting_rest/coldbox/index.cfm/sessions">ColdBox</a>,
+					<a href="http://localhost/presentations/getting_rest/machii/index.cfm/sessions">Mach-II</a>,
+					<a href="http://localhost/presentations/getting_rest/powernap/index.cfm/sessions">PowerNap</a>,
+					<a href="http://localhost/presentations/getting_rest/taffy/index.cfm/sessions">Taffy</a>
+					<br/><br/>
+				</p>
+				<p>Members:</p>
+				<p><code>/sessions/DCWVs-Midnight-Spell-Advent-Calendar</code></p>
+			</slide>
 
-				// Apply a 3D roll to links on hover
-				rollingLinks: true,
+			<slide>
+				<h1>CF10 Debug Tips</h1>
+				<p>Lots of tips &amp; detail <a href="https://github.com/atuttle/CF-REST-Comparison/tree/master/CF10#readme">in a ReadMe in the repo</a></p>
+			</slide>
 
-				// UI style
-				theme: query.theme || 'default', // default/neon
+			<slide>
+				<h1>Differences</h1>
+				<p>Primary differences are syntax &amp;<br/>amount of code you write.</p>
+				<ul>
+				<ul>
+					<li>No URL Rewriting to remove "index.cfm": <span class="hilight">CF10*</span></li>
+					<li>Auto-deserialize JSON input: <span class="hilight">T, CF10*</span></li>
+					<li>Abstracts serializing result: <span class="hilight">T, CB, CF10*, PN</span></li>
+					<li>Built-in tools for playing: <span class="hilight">T, CB*</span></li>
+					<li>Built-in tools for automated testing: <span class="hilight">CB</span></li>
+				</ul>
+				</ul>
+				<p><em>* Partial Credit</em></p>
+			</slide>
 
-				// Transition style
-				transition: query.transition || 'default' // default/cube/page/concave/linear(2d)
-			});
+			<slide>
+				<h1>Fín.</h1>
+				<p>Slides: <a href="http://fusiongrokker.com/p/Getting_REST/">fusiongrokker.com/p/Getting_REST/</a></p>
+				<br/>
+				<p>Code: <a href="https://github.com/atuttle/CF-REST-Comparison">on GitHub</a></p>
+				<br/>
+				<h4 class="inverted">fusiongrokker.com</h4>
+			</slide>
 
-			hljs.initHighlightingOnLoad();
-		</script>
+		</deck>
 
 	</body>
 </html>
