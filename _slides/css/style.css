@@ -15,10 +15,6 @@ html, body {
   position: fixed;
 }
 
-h1, h2, h3, h4 {
-  font-family: 'Signika Negative', 'Open Sans', Helvetica, sans-serif;
-}
-
 h1, h2, h3, h4, ul, ol, li, p {
   margin: 0;
   padding: 0;
@@ -27,6 +23,11 @@ h1, h2, h3, h4, ul, ol, li, p {
 #intro h3,
 #intro h1 {
   margin-bottom: 20px;
+}
+
+#intro h1 {
+  font-family: "Signika Negative", Helvetica;
+  font-size: 2em;
 }
 
 #intro h2 {
@@ -44,8 +45,7 @@ h1, h2, h3, h4, ul, ol, li, p {
   text-align: center;
   color: white;
   text-shadow: black 0.1em 0.1em 0.2em;
-  /* background: url(../images/google-transparent-200.png) no-repeat bottom center; */
-  padding: 100px 0 100px 0;
+  padding: 100px 0 0 0;
 }
 
 deck, slide {
@@ -61,66 +61,88 @@ deck {
 }
 
 slide {
-  font-size: 1.2em;
-  width: 85%;
-  height: 85%;
-  margin: 10px 50px;
-  padding: 20px 40px;
+  font-size: 1em;
+  width: 80%;
+  height: 80%;
+  margin: 30px;
+  padding: 20px;
   position: absolute;
-  background: white; /* url(../images/google.png) 98% 98% no-repeat; */
+  background: white url(../img/cms_logo.png) 588px 502px no-repeat;
   border: 1px solid #ccc;
   border-radius: 5px;
   color: #666;
   -webkit-transition: left 0.25s, -webkit-transform 0.8s;
-  -webkit-transform: scale(0.85) skew(-4deg) translateZ(0);
+  -webkit-transform: scale(0.85) skew(-2deg) translateZ(0);
   -webkit-box-shadow: rgba(0, 0, 0, 0.9) 0px 2px 6px;
   -moz-transition: left 0.8s, -moz-transform 0.8s;
   -moz-box-shadow: rgba(0, 0, 0, 0.9) 0px 2px 6px;
-  -moz-transform: scale(0.85) skew(-4deg) translateZ(0);
-  left: 880px;
+  box-shadow: rgba(0, 0, 0, 0.9) 0px 2px 6px;
+  -moz-transform: scale(0.85) skew(-2deg) translateZ(0);
+  left: 900px;
 }
 
-/* slide p, */
+/*
+slide p,
 slide li {
   white-space: pre-line;
 }
+*/
 
 slide li {
-  margin: 0.3em;
+  margin: 0;
+  line-height: 1.3em;
 }
 
 slide ol,
 slide ul {
   list-style-position: inside;
-  margin: 0.5em;
-  font-size: .8em;
-  line-height: 100%;
-}
-
-li ul, li ol {
   margin: 0;
-  line-height: 40%;
 }
 
-ul ul {
-  margin: 0 0 0 20px;
+ul ul  {
+  margin-left: 0.6em;
+  font-size: .8em;
 }
 
 slide img {
   display: block;
   margin: 0 auto;
-  max-width: 80%;
-  max-height: 80%;
+  max-height: 400px;
+  max-width: 650px;
+}
+
+img.left.left {
+  float: left;
+  margin-right: 20px;
+}
+
+img.right.right {
+  float: right;
+  margin-left: 20px;
+}
+
+slide img.inline {
+  display: inline-block;
+  margin: 0;
+}
+
+slide img.hidden {
+  visibility: hidden;
+}
+
+slide blockquote {
+  font-style: italic;
+  margin-left: 2em;
 }
 
 .previous {
-  -webkit-transform: scale(0.85) skew(4deg) translateZ(0);
-  -moz-transform: scale(0.85) skew(4deg) translateZ(0);
- left: -905px;
+  -webkit-transform: scale(0.85) skew(2deg) translateZ(0);
+  -moz-transform: scale(0.85) skew(2deg) translateZ(0);
+ left: -800px;
 }
 
 .current {
-  left: -12px;
+  left: 50px;
   -webkit-transform: translateZ(0);
   -moz-transform: translateZ(0);
 }
@@ -128,8 +150,10 @@ slide img {
 slide h2 {
   margin-bottom: 0.5em;
   font-size: 1.1em;
-  font-weight: 800;
+  font-weight: 700;
   color: black;
+  font-family: "Signika Negative", Helvetica;
+  font-size: 1.6em;
 }
 
 slide h3 {
@@ -185,60 +209,22 @@ slide h3 {
   visibility: hidden;
 }
 
-[slide-flip] .flip {
-  color: #6D9ABB;
-  font-size: 0.7em;
-  position: absolute;
-  top: 1.3em;
-  right: 2em;
-  display: block;
+.noDots {
+  list-style: none;
 }
 
-[slide-flip] .flip:hover {
-  text-decoration: underline;
-  color: #0063A4;
+kbd {
+  border: 1px solid black;
+  padding: 10px 4px 0 4px;
+  border-radius: 8px;
+  background-color: #EEE;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.9) 0px 2px 6px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.9) 0px 2px 6px;
+  box-shadow: rgba(0, 0, 0, 0.9) 0px 2px 6px;
 }
 
-
-[slide-flip] .back,
-[slide-flip] .front {
-  height: 0;
-  opacity: 0;
-  overflow: hidden;
-  -webkit-transition: opacity 1s;
-}
-
-[slide-flip] .back .flip,
-[slide-flip] .front .flip {
-  display: none;
-}
-
-[slide-flip] .expanded .flip {
-  display: block;
-}
-
-[slide-flip] .expanded {
-  opacity: 1;
-  height: auto;
-  overflow: visible;
-}
-
-.party-controller {
-  margin: 0.5em 0 0 0.5em;
-}
-
-.party-controller input,
-.party-controller select {
-  font-size: 1em;
-  border: 1px solid #3D3D3D;
-  display: inline-block;
-  width: 6.2em;
-}
-
-.party-controller p {
-  line-height: 2em;
-  white-space: normal;
-  margin-top: 0.5em;
+a[rel=shadowbox] {
+  text-decoration: none;
 }
 
 .hilight {
