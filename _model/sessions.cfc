@@ -1,4 +1,4 @@
-component{
+component {
 
 	function getAllSessionsWithSpeakers(api_base_path = ""){
 		local.q = new Query();

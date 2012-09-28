@@ -16,7 +16,7 @@
 				returnType="array"
 				httpMethod="GET">
 
-		<cfset local.sessions = variables.sessionModel.getAllSessionsWithSpeakers( "http://localhost/rest/cfobjective" ) />
+		<cfset local.sessions = variables.sessionModel.getAllSessionsWithSpeakers( "http://localhost/rest/getting_rest_preso" ) />
 		<cfreturn local.sessions />
 
 	</cffunction>
@@ -34,7 +34,7 @@
 
 		<cfargument name="sessionSlug" restArgSource="path" />
 
-		<cfset local.session = variables.sessionModel.getSession(arguments.sessionSlug, "http://localhost/rest/cfobjective") />
+		<cfset local.session = variables.sessionModel.getSession(arguments.sessionSlug, "http://localhost/rest/getting_rest_preso") />
 
 		<cfif isBoolean(local.session) and local.session eq false>
 			<cfthrow errorCode="404" />

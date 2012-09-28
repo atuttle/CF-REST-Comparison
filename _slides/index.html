@@ -34,7 +34,10 @@
 			<h1>Are You Getting<br/>Enough REST?</h1>
 			<h2>Adam Tuttle</h2>
 			<h3>For NCDevCon 2012</h3>
-			<h4 ng-show="isAfter()">@AdamTuttle / adam (at) fusiongrokker.com</h4>
+			<h3 ng-show="isAfter()">
+				@AdamTuttle<br/>
+				adam (at) fusiongrokker.com
+			</h3>
 		</div>
 
 		<p id="counter" ng-show="isInsideDeck()">
@@ -48,21 +51,22 @@
 			<slide>
 				<h2>Obligatory "About Me" Slide</h2>
 				<ul>
-					<li>CounterMarch Systems ~&gt; Philly</li>
-					<li><a href="http://www.phillycfug.org">Philly CFUG</a> Manager</li>
-					<li>ACP: ColdFusion</li>
+					<li>"Work" at CounterMarch Systems, near Philly</li>
+					<li>Manager of <a href="http://www.phillycfug.org">Philly CFUG</a> 2009-Present</li>
+					<li>ColdFusion ACP 2010-Present</li>
 					<li>Blog: <a href="http://fusiongrokker.com">fusiongrokker.com</a></li>
-					<li><a href="http://www.phillymerge.com">Philly Merge</a></li>
-					<li>Open Source:</li>
-					<ul>
-						<li><a href="http://github.com/atuttle/Taffy">Taffy</a></li>
-						<li><a href="https://github.com/CFCommunity/CFScript-Community-Components">CFScript Community Components</a></li>
-						<li><a href="https://github.com/CFCommunity/Ramen">Ramen</a></li>
-						<li>13 Mango Blog plugins (Related Entries, Scribe, ...)</li>
-					</ul>
+					<li>Open Source:
+						<ul>
+							<li><a href="http://github.com/atuttle/Taffy">Taffy</a></li>
+							<li><a href="https://github.com/CFCommunity/CFScript-Community-Components">CFScript Community Components</a></li>
+							<li><a href="https://github.com/CFCommunity/ramen">Ramen</a></li>
+							<li>13+ Mango Blog plugins</li>
+						</ul>
+					</li>
 				</ul>
 			</slide>
 
+<!--
 			<slide>
 				<h2>Family</h2>
 				<img src="img/dylan.jpg" />
@@ -72,9 +76,10 @@
 				<h2>Come At Me, Bro!</h2>
 				<img src="img/ethan.jpg" />
 			</slide>
+-->
 
 			<slide>
-				<h1>Agenda</h1>
+				<h2>Agenda</h2>
 				<p>Talk about REST frameworks, not learn basic theory.</p>
 				<ul>
 					<li>Database &amp; Reusable Model</li>
@@ -91,14 +96,14 @@
 			</slide>
 
 			<slide>
-				<h1>Database</h1>
+				<h2>Database</h2>
 				<p>A conference scheduling database</p>
 				<p><br/></p>
 				<p>Promised not to use the "Artists" database!</p>
 			</slide>
 
 			<slide>
-				<h1><del>"Permiscuous"</del> Reusable Model</h1>
+				<h2><del>"Permiscuous"</del> Reusable Model</h2>
 				<ul>
 					<li>Speakers</li>
 					<li>Sessions</li>
@@ -106,8 +111,9 @@
 			</slide>
 
 			<slide>
-				<h1>Frameworks!</h1>
+				<h2>Frameworks!</h2>
 				<p>These frameworks and more at your disposal...</p>
+				<br/>
 				<ul>
 					<li>ColdFusion 10 ("Native")</li>
 					<li>ColdBox Relax</li>
@@ -118,10 +124,10 @@
 			</slide>
 
 			<slide>
-				<h1>Proof</h1>
+				<h2>Proof</h2>
 				<p>Collections:</p>
 				<p>
-					<a href="http://localhost/rest/cfobjective/sessions">CF10</a>, 
+					<a href="http://localhost/rest/getting_rest_preso/sessions">CF10</a>, 
 					<a href="http://localhost/presentations/getting_rest/coldbox/index.cfm/sessions">ColdBox</a>,
 					<a href="http://localhost/presentations/getting_rest/machii/index.cfm/sessions">Mach-II</a>,
 					<a href="http://localhost/presentations/getting_rest/powernap/index.cfm/sessions">PowerNap</a>,
@@ -133,13 +139,14 @@
 			</slide>
 
 			<slide>
-				<h1>CF10 Debug Tips</h1>
+				<h2>CF10 Debug Tips</h2>
 				<p>Lots of tips &amp; detail <a href="https://github.com/atuttle/CF-REST-Comparison/tree/master/CF10#readme">in a ReadMe in the repo</a></p>
 			</slide>
 
 			<slide>
-				<h1>Differences</h1>
+				<h2>Differences</h2>
 				<p>Primary differences are syntax &amp;<br/>amount of code you write.</p>
+				<br/>
 				<ul>
 				<ul>
 					<li>No URL Rewriting to remove "index.cfm": <span class="hilight">CF10*</span></li>
@@ -149,11 +156,12 @@
 					<li>Built-in tools for automated testing: <span class="hilight">CB</span></li>
 				</ul>
 				</ul>
+				<br/>
 				<p><em>* Partial Credit</em></p>
 			</slide>
 
 			<slide>
-				<h1>Fín.</h1>
+				<h2>Fín.</h2>
 				<p>Slides: <a href="http://fusiongrokker.com/p/Getting_REST/">fusiongrokker.com/p/Getting_REST/</a></p>
 				<br/>
 				<p>Code: <a href="https://github.com/atuttle/CF-REST-Comparison">on GitHub</a></p>
