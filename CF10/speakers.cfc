@@ -30,7 +30,7 @@
 				access="remote"
 				produces="application/json"
 				httpMethod="GET"
-				restPath="/{speakerSlug}">
+				restPath="/{speakerSlug}"> <!--- implies /speakers/{speakerSlug} --->
 
 		<cfargument name="speakerSlug" restArgSource="path" />
 

@@ -4,6 +4,8 @@ component{
 		read = "GET"
 	};
 
+	variables.speakerModel = createObject("component", "model.speakers");
+
 	function read(event,rc,prc){
 		//default the format value for this method
 		event.paramValue("format", "json");
@@ -16,7 +18,5 @@ component{
 			type=rc.format
 		);
 	}
-
-
 
 }
