@@ -10,6 +10,26 @@
    1. Refresh REST services
    1. Check to see if "exception.log" is back. (If so, read it and address the problem.)
 
+### You can change the `/rest/...` chunk of the url
+
+Some people may not like the requirement to have "/rest/" in their API URLs, but fortunately you can change it. For example, you may want it to use `/api/` instead.
+
+Find `{cf-root}/{instance name, e.g. cfusion}/wwwroot/WEB-INF/web.xml` and in it find this section:
+
+	<servlet-mapping id="coldfusion_mapping_15">
+	    <servlet-name>CFRestServlet</servlet-name>
+	    <url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+
+...And change it to this:
+
+	<servlet-mapping id="coldfusion_mapping_15">
+	   <servlet-name>CFRestServlet</servlet-name>
+	   <url-pattern>/api/*</url-pattern>
+	</servlet-mapping>
+
+You can change it to whatever you like.
+
 ## Common Errors:
 
 * **500 Object is not an instance of declaring class**: One of your REST CFC's changed and you need to refresh the service.
