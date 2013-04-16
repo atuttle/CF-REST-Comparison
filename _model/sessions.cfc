@@ -15,25 +15,25 @@ component {
 		local.sessions = [];
 		for (local.i = 1; local.i <= local.qSessions.recordCount; local.i++){
 			local.s = {
-				"title": local.qSessions.sessionTitle[local.i],
-				"desc": local.qSessions.sessionDesc[local.i],
-				"startDate": local.qSessions.startDate[local.i],
-				"slug": local.qSessions.sessionSlug[local.i],
-				"speakers": []
+				"title" = local.qSessions.sessionTitle[local.i],
+				"desc" = local.qSessions.sessionDesc[local.i],
+				"startDate" = local.qSessions.startDate[local.i],
+				"slug" = local.qSessions.sessionSlug[local.i],
+				"speakers" = []
 			};
 
 			//SUBQUERY: get speakers for each session
 			local.qSpk = new Query();
 			local.qSpk.setSql("
 				select
-					speakerName, speakerBio, speakerSlug
+					s.speakerName, s.speakerBio, s.speakerSlug
 				from
 					speaker s
 					inner join session_speaker j on j.speakerId = s.speakerId
 				where
-					j.sessionId = :sessionId
+					j.sessionId = :sessionId 
 				order by
-					speakerName
+					s.speakerName
 			");
 			local.qSpk.addParam(name="sessionId",cfsqltype="cf_sql_numeric",value=local.qSessions.sessionId[local.i]);
 
@@ -41,9 +41,9 @@ component {
 
 			for (local.j = 1; local.j <= local.spkResult.recordCount; local.j++){
 				arrayAppend(local.s.speakers, {
-					"name": local.spkResult.speakerName[local.j],
-					"bio": local.spkResult.speakerBio[local.j],
-					"slug": local.spkResult.speakerSlug[local.j]
+					"name" = local.spkResult.speakerName[local.j],
+					"bio" = local.spkResult.speakerBio[local.j],
+					"slug" = local.spkResult.speakerSlug[local.j]
 				});
 			}
 
@@ -56,19 +56,19 @@ component {
 		*/
 		if (arguments.api_base_path neq "") {
 			//inject api-framework-specific url elements
-			arrayEach(local.sessions, function(session){
-
+			for ( var session in local.sessions ) {
+					
 				//add url for current session
 				session["url"] = api_base_path & "/sessions/" & session.slug;
 
 				//also link each speaker for each session
-				arrayEach(session.speakers, function(speaker){
+				for ( var speaker in session.speakers ) {
 
 					speaker["url"] = api_base_path & "/speakers/" & speaker.slug;
 
-				});
+				}
 
-			});
+			}
 		}
 
 		return local.sessions;
@@ -85,7 +85,7 @@ component {
 				inner join session_speaker ss on ses.sessionId = ss.sessionId
 				inner join speaker spk on spk.speakerId = ss.speakerId
 			where
-				ses.sessionSlug = :sessionSlug
+				ses.sessionSlug = :sessionSlug 
 			order by
 				startDate, sessionTitle
 		");
@@ -97,19 +97,19 @@ component {
 
 			//massage return data into a nice format
 			local.result = {
-				'title': local.qResult.sessionTitle,
-				'desc': local.qResult.sessionDesc,
-				'startDate': local.qResult.startDate,
-				'slug': local.qResult.sessionSlug
+				'title' = local.qResult.sessionTitle,
+				'desc' = local.qResult.sessionDesc,
+				'startDate' = local.qResult.startDate,
+				'slug' = local.qResult.sessionSlug
 			};
 
 			if (arguments.includeSpeakers){
 				local.result['speakers'] = [];
 				for (local.i = 1; local.i <= local.qResult.recordCount; local.i++){
 					arrayAppend(local.result.speakers, {
-						'name': local.qResult.speakerName[local.i],
-						'bio': local.qResult.speakerBio[local.i],
-						'slug': local.qResult.speakerSlug[local.i]
+						'name' = local.qResult.speakerName[local.i],
+						'bio' = local.qResult.speakerBio[local.i],
+						'slug' = local.qResult.speakerSlug[local.i]
 					});
 				}
 			}
@@ -124,11 +124,11 @@ component {
 				local.result["url"] = api_base_path & "/sessions/" & local.result.slug;
 
 				//also link each speaker for each session
-				arrayEach(local.result.speakers, function(speaker){
+				for (var speaker in local.result.speakers ) {
 
 					speaker["url"] = api_base_path & "/speakers/" & speaker.slug;
 
-				});
+				}
 			}
 
 			return local.result;
