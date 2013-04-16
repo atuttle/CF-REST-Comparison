@@ -5,5 +5,6 @@ component {
 	this.mappings = {};
 
 	this.mappings["/model"] = expandPath('../_model');
+	this.mappings["/res"] = expandPath('./res');
 
 }
