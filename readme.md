@@ -6,13 +6,16 @@ This repo is a collection of sample REST API's implemented using various framewo
 * ColdBox: Relax
 * Mach-II (1.9 bleeding edge release)
 * Powernap
+* Relaxation
 * Taffy
 
 The same model is reused throughout all examples.
 
 ## Database
 
-I'm using MySQL for the purposes of my presentation, but there's no reason it shouldn't be able to run on MSSQL/etc. To date I haven't prepared a script to generate the DB -- just haven't needed it.
+I'm using MySQL for the purposes of my presentation, but there's no reason it shouldn't be able to run on MSSQL/etc. 
+
+(Table create + populate scripts are provided for MySQL and MSSQL in the "sql" folder.)
 
 ## Presentation
 
