@@ -13,9 +13,7 @@ component {
 	**/
 	public function onRequestStart() {
 		if ( isDefined("url.Reinit") || isNull(application.Relaxation) ) {
-			var Relaxation = new com.Relaxation.Relaxation( "./RestConfig.json.cfm" );
-			Relaxation.setBeanFactory( new com.SimpleFactory() );
-			application.Relaxation = Relaxation;
+			application.Relaxation = new com.Relaxation.Relaxation( "./RestConfig.json.cfm" );
 		}
 	}
 	
@@ -24,12 +22,7 @@ component {
 	* @output true
 	**/
 	public void function onRequest() {
-		var result = application.Relaxation.handleRequest();
-		if ( result.Success ) {
-			writeOutput( result.Output );
-		} else {
-			writeOutput( SerializeJSON(result) );
-		}
+		application.Relaxation.handleRequest();
 	}
 
 }

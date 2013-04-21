@@ -1,7 +1,7 @@
 component
 	accessors="true"
-	displayname="Chill REST Framework"
-	hint="I am the Chill. Framework for REST in CF. Relax, I got this!"
+	displayname="Relaxation REST Framework"
+	hint="I am the Relaxation framework for REST in CF. Relax, I got this!"
 	output="false"
 {
 
@@ -16,13 +16,20 @@ component
 	* @hint "I initialize the object and get the routing all setup."
 	* @output false
 	**/
-	public component function init( required any Config ) {
+	public component function init( required any Config, component BeanFactory, any AuthorizationMethod, any OnErrorMethod ) {
 		/* Set object to handle CFML stuff. */
 		setcfmlFunctions( new cfmlFunctions() );
+		if ( structKeyExists(arguments,'BeanFactory') ) {
+			setBeanFactory( arguments.BeanFactory );
+		}
+		if ( structKeyExists(arguments,'AuthorizationMethod') ) {
+			setAuthorizationMethod( arguments.AuthorizationMethod );
+		}
+		if ( structKeyExists(arguments,'OnErrorMethod') ) {
+			setOnErrorMethod( arguments.OnErrorMethod );
+		}
 		/* Deal with different types of configs passed in. */
 		arguments.Config = translateConfig( arguments.Config );
-		/* Set the Return Format. Default JSON. */
-		variables.Config.ReturnFormat = isDefined("arguments.Config.ReturnFormat") ? arguments.Config.ReturnFormat : 'JSON';
 		/* Get the pattern matching for resources setup. */
 		configureResources( arguments.Config.RequestPatterns );
 		/* Always return the object. */
@@ -38,10 +45,77 @@ component
 	}
 	
 	/**
-	* @hint "I will handle a REST request. Given the requested path and verb, I will call the correct resource and method."
+	* @hint "I will handle a REST request including appropriate output and headers."
+	* @output true
+	**/
+	public struct function handleRequest( string Path = CGI.PATH_INFO ) {
+		/* Process the request. */
+		var result = processRequest( ArgumentCollection = arguments );
+		/* Deal with rendering the result. */
+		if ( result.Success ) {
+			/* Happiness, the request was successful! */
+			setResponseHeader('Allow', result.AllowedVerbs);
+			if ( len(trim(result.Output)) > 0 ) {
+				/* Tell the client we are sending JSON. */
+				setResponseContentType('application/json');
+				/* Give'em what they asked for. */
+				writeOutput( result.Output );
+			} else {
+				/* No output means a 204 */
+				setResponseStatus(204,'No Content');
+			}
+		} else {
+			/* Provide appropriate error responses. */
+			switch(result.Error) {
+				case "NotAuthorized": {
+					var response = {
+						'status' = 403,
+						'statusText' = 'Forbidden',
+						'responseText' = 'The user does not have access to this resource'
+					};
+					break;
+				}
+				case "ResourceNotFound": {
+					var response = {
+						'status' = 404,
+						'statusText' = 'Not Found',
+						'responseText' = result.ErrorMessage
+					};
+					break;
+				}
+				case "VerbNotFound": {
+					setResponseHeader('Allow', result.AllowedVerbs);
+					var response = {
+						'status' = 405,
+						'statusText' = 'Method Not Allowed',
+						'responseText' = result.ErrorMessage
+					};
+					break;
+				}
+				default: {
+					var response = {
+						'status' = 500,
+						'statusText' = 'Unknown Error Type',
+						'responseText' = result.ErrorMessage
+					};
+					break;
+				}
+			}
+			/* Tell the client we are sending JSON. */
+			setResponseContentType('application/json');
+			/* Output the response */
+			setResponseStatus(response.status, response.statusText);
+			writeOutput( SerializeJSON(response) );
+		}
+		result["Rendered"] = true;
+		return result;
+	}
+	
+	/**
+	* @hint "I will process a REST request. Given the requested path and verb, I will call the correct resource and method."
 	* @output false
 	**/
-	public struct function handleRequest(
+	public struct function processRequest(
 		string Path = CGI.PATH_INFO,
 		string Verb = CGI.REQUEST_METHOD,
 		string RequestBody,
@@ -63,6 +137,7 @@ component
 			,"Output" = ""
 			,"Error" = ""
 			,"ErrorMessage" = ""
+			,"AllowedVerbs" = ""
 		};
 		var resource = findResourceConfig( argumentCollection = arguments );
 		if ( !resource.Located ) {
@@ -76,22 +151,35 @@ component
 			}
 			return result;
 		}
+		result.AllowedVerbs = resource.AllowedVerbs;
+		if ( arguments.Verb == "OPTIONS" ) {
+			/* They just wanted to know which verbs are supported. We're done. */
+			return result;	
+		}
 		if ( !isNull(getAuthorizationMethod()) ) {
 			var authorize = getAuthorizationMethod();
-			if ( !authorize(resource) ) {
+			var authArg = {
+				"Bean" = resource.Bean,
+				"Method" = resource.Method,
+				"Path" = resource.Path,
+				"Pattern" = resource.Pattern,
+				"Verb" = resource.Verb
+			};
+			if ( !authorize(authArg) ) {
 				result.Success = false;
 				result.Error = "NotAuthorized";
+				return result;
 			}
 		}
-		var bean = getBeanFactory().getBean(resource.Bean);
+		var bean = getMappedBean(resource.Bean);
 		/* Gather the arguments needed to call the method. */
 		var args = gatherRequestArguments( argumentCollection = arguments, ResourceMatch = resource);
 		/* Now call the method on the bean! */
 		try {
 			var methodResult = variables.cfmlFunctions.cfmlInvoke(bean, resource.Method, args);
-			/* If calling the method was successful. Tell the client we are sending JSON. */
-			getpagecontext().getresponse().setcontenttype('application/json');
 		} catch (Any e) {
+			result.Success = false;
+			result.ErrorMessage = e.Message;
 			if ( !isNull(getOnErrorMethod()) ) {
 				var onError = getOnErrorMethod();
 				onError(e, resource, args);
@@ -101,6 +189,30 @@ component
 		}
 		result.Output = isDefined("methodResult") ? SerializeJSON(methodResult) : "";
 		return result;
+	}
+	
+	/**
+	* @hint "I set response content type."
+	* @output false
+	**/
+	public void function setResponseContentType( required string ContentType ) {
+		getpagecontext().getresponse().setContentType(JavaCast("string",arguments.ContentType));
+	}
+	
+	/**
+	* @hint "I set response headers."
+	* @output false
+	**/
+	public void function setResponseHeader( required string Header, string HeaderText = "" ) {
+		getpagecontext().getResponse().setHeader(JavaCast("string",arguments.Header), JavaCast("string",arguments.HeaderText));
+	}
+	
+	/**
+	* @hint "I set response status headers."
+	* @output false
+	**/
+	public void function setResponseStatus( required numeric Status, string StatusText = "" ) {
+		getpagecontext().getResponse().setStatus(JavaCast("int",arguments.Status), JavaCast("string",arguments.StatusText));
 	}
 	
 	
@@ -119,11 +231,13 @@ component
 		var keyList = ListSort(StructKeyList(arguments.Patterns), 'textnocase', 'asc');
 		for ( var key in ListToArray(keyList) ) {
 			var resource = arguments.Patterns[key];
-			var resource["Pattern"] = key & ( Right(trim(key),1) EQ '/' ? '' : '/' );
-			/* Start building the regex for this pattern. */
-			resource.Regex = key;
+			/* Build "AllowedVerbs" for "Allow" header. */
+			resource["AllowedVerbs"] = uCase(ListAppend(StructKeyList(resource),"OPTIONS"));
+			resource["AllowedVerbs"] = ListSort(resource["AllowedVerbs"],"textnocase","ASC");
 			/* Add trailing slash to make matching easier. */
-			resource.Regex &= ( Right(trim(resource.Regex),1) EQ '/' ? '' : '/' );
+			resource["Pattern"] = key & ( Right(trim(key),1) EQ '/' ? '' : '/' );
+			/* Start building the regex for this pattern. */
+			resource.Regex = resource["Pattern"];
 			/* Replace the {} sections with capture groups. */
 			resource.Regex = REReplace(resource.Regex, "{[^}]*?}", "([^/]+?)", "all");
 			/* Make sure it matches exactly. (Start to finish) */
@@ -144,12 +258,13 @@ component
 		/* Add trailing slash to make matching easier. */
 		arguments.Path &= ( Right(trim(arguments.Path),1) EQ '/' ? '' : '/' );
 		var result = {
-			"Located" = false
+			"AllowedVerbs" = ""
+			,"Located" = false
 			,"Error" = ""
 			,"Path" = ""
 			,"Pattern" = ""
 			,"Regex" = ""
-			,"Verb" = ""
+			,"Verb" = arguments.Verb
 		};
 		for ( var resource in variables.Config.Resources ) {
 			if ( RefindNoCase(resource.Regex,arguments.Path) ) {
@@ -160,16 +275,21 @@ component
 		if ( IsNull(match) ) {
 			result.Error = "ResourceNotFound";
 		} else {
+			result.AllowedVerbs = match.AllowedVerbs;
+			result.Path = arguments.Path;
+			result.Pattern = match.Pattern;
+			result.Regex = match.Regex;
+			if ( arguments.Verb == "OPTIONS" ) {
+				/* They just want the options. */
+				result.Located = true;
+				return result;
+			}
 			if ( !StructKeyExists(match, arguments.Verb) ) {
 				result.Error = "VerbNotFound";
-			} else {
-				result.Located = true;
-				result.Path = arguments.Path;
-				result.Pattern = match.Pattern;
-				result.Regex = match.Regex;
-				result.Verb = arguments.Verb;
-				StructAppend(result, match[arguments.Verb]);
+				return result;
 			}
+			result.Located = true;
+			StructAppend(result, match[arguments.Verb]);
 		}
 		return result;
 	}
@@ -221,6 +341,18 @@ component
 	}
 	
 	/**
+	* @hint "I will get the bean from the BeanFactory or as a new object."
+	* @output false
+	**/
+	private component function getMappedBean( required string Bean ) {
+		if ( isDefined("variables.BeanFactory") ) {
+			return getBeanFactory().getBean(arguments.Bean);
+		} else {
+			return CreateObject("component", arguments.Bean);
+		}
+	}
+	
+	/**
 	* @hint "I will handle any type of config passed in."
 	* @output false
 	**/
@@ -231,12 +363,10 @@ component
 			/* It's already a struct. Return it. */
 			return arguments.Config;
 		}
-		
 		if ( isJSON(trim(arguments.Config)) ) {
 			/* It's a JSON string. Deserialize and return it. */
 			return DeserializeJSON(trim(arguments.Config));
 		}
-		
 		if ( !fileExists(arguments.Config) && fileExists(expandPath(arguments.Config)) ) {
 			arguments.Config = expandPath(arguments.Config);
 		}
