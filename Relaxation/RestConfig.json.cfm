@@ -2,20 +2,20 @@
 	"RequestPatterns": {
 		"/sessions": {
 			"GET": {
-				"Bean": "sessions"
+				"Bean": "model.sessions"
 				,"Method": "getAllSessionsWithSpeakers"
 				,"DefaultArguments": {
 					"api_base_path": "/presentations/getting_rest/Relaxation/index.cfm"
 				}
 			},
 			"POST": {
-				"Bean": "sessions"
+				"Bean": "model.sessions"
 				,"Method": "create"
 			}
 		}
 		,"/sessions/{sessionSlug}": {
 			"GET": {
-				"Bean": "sessions"
+				"Bean": "model.sessions"
 				,"Method": "getSession"
 				,"DefaultArguments": {
 					"api_base_path": "/presentations/getting_rest/Relaxation/index.cfm"
@@ -24,7 +24,7 @@
 		}
 		,"/speakers": {
 			"GET": {
-				"Bean": "speakers"
+				"Bean": "model.speakers"
 				,"Method": "getAllSpeakersWithSessions"
 				,"DefaultArguments": {
 					"api_base_path": "/presentations/getting_rest/Relaxation/index.cfm"
@@ -33,7 +33,7 @@
 		}
 		,"/speakers/{speakerSlug}": {
 			"GET": {
-				"Bean": "speakers"
+				"Bean": "model.speakers"
 				,"Method": "getSpeaker"
 				,"DefaultArguments": {
 					"api_base_path": "/presentations/getting_rest/Relaxation/index.cfm"
